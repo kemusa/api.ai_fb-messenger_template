@@ -4,10 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
+var expressSession = require('express-session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var getFiling = require('./routes/getFiling');
+var data = require('./routes/data');
 
 var app = express();
 
@@ -20,12 +22,21 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// it's important that express validator is called after bodyParser
+app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// secret:set secret length 
+// saveUninitialized: only save to sessio storage if session is initialized
+// resave: only save session is we change something
+// DEFAULT STORAGE IS IN MEMORY... NOT RECOMMENDED FOR PRODUCTION!
+// MUST SAVE TO A SERVER FOR PRODUCTION
+// SEE EXPRESS SESSION REPO FOR OPTIONS
+app.use(expressSession({secret:'max', saveUninitialized: false, resave: false}));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/getFiling', getFiling);
+app.use('/data', data);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
