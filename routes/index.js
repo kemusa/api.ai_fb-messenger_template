@@ -3,6 +3,7 @@ var router = express.Router();
 var mongo = require('mongodb');
 var assert = require('assert');
 var intents = require('../intents');
+var fb = require('../messenger')
 
 const token = process.env.FB_VERIFY_TOKEN;
 const access = process.env.FB_ACCESS_TOKEN;
@@ -54,7 +55,7 @@ router.post('/messenger', function (req, res) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         if (event.message) {
-          receivedMessage(event);
+          fb.receivedMessage(event);
         } else {
           console.log("Webhook received unknown event: ", event);
         }
@@ -70,24 +71,5 @@ router.post('/messenger', function (req, res) {
   }
 });
 
-
-function receivedMessage(event) {
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfMessage = event.timestamp;
-  var message = event.message;
-
-  console.log("Received message for user %d and page %d at %d with message:", 
-    senderID, recipientID, timeOfMessage);
-  console.log(JSON.stringify(message));
-
-  var messageId = message.mid;
-
-  var messageText = message.text;
-  var messageAttachments = message.attachments;
-
-  classifyMessage(message, senderID);
-
-}
 
 module.exports = router;
