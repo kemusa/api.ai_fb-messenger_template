@@ -28,10 +28,10 @@ router.post('/data', function(req, res, next) {
   // use intentName to call the right function and pass in data
   intents[intentName](data);
 
+  res.sendStatus(200);
 });
 
 // Messenger Get and Post clients webhooks
-
 router.get('/messenger', function(req, res, next) {
 
 	if(req.query['hub.verify_token'] === token) {
@@ -70,9 +70,24 @@ router.post('/messenger', function (req, res) {
   }
 });
 
+
 function receivedMessage(event) {
-  // Putting a stub for now, we'll expand it in the following steps
-  console.log("Message data: ", event.message);
+  var senderID = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfMessage = event.timestamp;
+  var message = event.message;
+
+  console.log("Received message for user %d and page %d at %d with message:", 
+    senderID, recipientID, timeOfMessage);
+  console.log(JSON.stringify(message));
+
+  var messageId = message.mid;
+
+  var messageText = message.text;
+  var messageAttachments = message.attachments;
+
+  classifyMessage(message, senderID);
+
 }
 
 module.exports = router;
