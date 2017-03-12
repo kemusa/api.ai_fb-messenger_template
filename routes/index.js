@@ -40,7 +40,7 @@ router.get('/messenger', function(req, res, next) {
 	res.send('Error, wrong token')
 })
 
-app.post('/messenger', function (req, res) {
+router.post('/messenger', function (req, res) {
   var data = req.body;
 
   // Make sure this is a page subscription
