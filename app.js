@@ -9,8 +9,6 @@ var expressSession = require('express-session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var data = require('./routes/data');
-var clients = require('./routes/clients');
 var app = express();
 
 // view engine setup
@@ -36,8 +34,6 @@ app.use(expressSession({secret:'max', saveUninitialized: false, resave: false}))
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/data', data);
-app.use('/clients', clients);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
