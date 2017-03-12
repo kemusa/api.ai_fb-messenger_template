@@ -4,7 +4,7 @@ var intents = require('../intents');
 
 /* GET users listing. */
 router.post('/', function(req, res, next) {
-  // In this function we ake JSON from API.ai and pass data 
+  // In this function we take JSON from API.ai and pass data 
   // to the intent function
   
   // obtain data JSON
