@@ -1,4 +1,4 @@
-var apiai = require('apiai');
+var apiai = require('./apidotai');
 
 module.exports = {
 	receivedMessage: function(event) {
