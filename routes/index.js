@@ -34,7 +34,7 @@ router.post('/data', function(req, res, next) {
 // Messenger Get and Post clients webhooks
 router.get('/messenger', function(req, res, next) {
 
-	if(req.query['hub.verify_token'] === token) {
+	if(req.query['hub.verify_token'] === 'solve_financial_intelligence') {
 		res.send(req.query['hub.challenge'])
 	}
 	res.send('Error, wrong token')
@@ -55,7 +55,8 @@ router.post('/messenger', function (req, res) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         if (event.message) {
-          fb.receivedMessage(event);
+          // fb.receivedMessage(event);
+          console.log(event.message);
         } else {
           console.log("Webhook received unknown event: ", event);
         }
