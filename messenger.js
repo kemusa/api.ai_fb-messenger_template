@@ -1,3 +1,5 @@
+var apiai = require('apiai');
+
 module.exports = {
 	receivedMessage: function(event) {
 	  var senderID = event.sender.id;
@@ -14,7 +16,7 @@ module.exports = {
 	  var messageText = message.text;
 	  var messageAttachments = message.attachments;
 
-	  classifyMessage(message, senderID);
+	  apiai.classifyMessage(message, senderID);
 	  console.log('no problem 2');
 }
 

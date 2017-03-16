@@ -1,10 +1,8 @@
-var apiai = require('apiai');
-
 var app = apiai("2fe8e7eb2ffc4d428e85f13eb8066e6c");
 
 function classifyMessage(message, sessionId) {
 
-	var request = app.textRequest('<Your text query>', {
+	var request = app.textRequest(message, {
 	    sessionId: sessionId
 	});
 
