@@ -69,6 +69,9 @@ router.post('/messenger', function (req, res) {
     // will time out and we will keep trying to resend.
     res.sendStatus(200);
   }
+  else{
+  	console.log('FAIL');
+  }
 });
 
 
