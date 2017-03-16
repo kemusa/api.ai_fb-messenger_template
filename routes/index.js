@@ -28,7 +28,6 @@ router.post('/data', function(req, res, next) {
   
   // use intentName to call the right function and pass in data
   intents[intentName](data);
-
   res.sendStatus(200);
 });
 
@@ -43,6 +42,7 @@ router.get('/messenger', function(req, res, next) {
 
 router.post('/messenger', function (req, res) {
   var data = req.body;
+  console.log(data);
 
   // Make sure this is a page subscription
   if (data.object === 'page') {
