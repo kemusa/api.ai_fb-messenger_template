@@ -16,7 +16,7 @@ module.exports = {
 	  var messageText = message.text;
 	  var messageAttachments = message.attachments;
 
-	  apiai.classifyMessage(message, senderID);
+	  apiai.classifyMessage(messageText, senderID);
 	  console.log('no problem 2');
 }
 
