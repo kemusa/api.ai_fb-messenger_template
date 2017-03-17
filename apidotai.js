@@ -1,3 +1,5 @@
+var apiai = require('apiai');
+
 module.exports = {
 
 	classifyMessage: function(message, sessionId) {
