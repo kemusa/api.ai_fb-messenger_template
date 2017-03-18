@@ -13,10 +13,11 @@ module.exports = {
 
 		request.on('response', function(response) {
 		    console.log('got response');
+		    var reply = response.body.result.fulfillment.speech;
 
 		switch(client) {
     		case 'messenger':
-		        fb.sendTextMessage(sessionId, message);
+		        fb.sendTextMessage(sessionId, reply);
 		        break;
 		    case 'whatsapp':
 		        console.log('whatsapp')
