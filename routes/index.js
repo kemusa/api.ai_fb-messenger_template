@@ -3,7 +3,7 @@ var router = express.Router();
 var mongo = require('mongodb');
 var assert = require('assert');
 var intents = require('../intents');
-var fb = require('../messenger')
+var fb = require('../messenger_rec')
 
 const token = process.env.FB_VERIFY_TOKEN;
 
