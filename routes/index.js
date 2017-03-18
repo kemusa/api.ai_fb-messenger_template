@@ -6,7 +6,6 @@ var intents = require('../intents');
 var fb = require('../messenger')
 
 const token = process.env.FB_VERIFY_TOKEN;
-const access = process.env.FB_ACCESS_TOKEN;
 
 //point to database
 var url = 'mongodb://localhost:27017/test';
@@ -71,40 +70,5 @@ router.post('/messenger', function (req, res) {
   	console.log('FAIL');
   }
 });
-
-function sendTextMessage(recipientId, messageText) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: messageText
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-function callSendAPI(messageData) {
-  request({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
-    method: 'POST',
-    json: messageData
-
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      console.log("Successfully sent generic message with id %s to recipient %s", 
-        messageId, recipientId);
-    } else {
-      console.error("Unable to send message.");
-      console.error(response);
-      console.error(error);
-    }
-  });  
-}
 
 module.exports = router;
