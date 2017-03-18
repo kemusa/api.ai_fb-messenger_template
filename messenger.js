@@ -17,7 +17,7 @@ module.exports = {
 	  console.log('classifying the input')
 	  // NEED TO MAKE CALLS BELOW A PROMISE
 	  var responseData = apiai.classifyMessage(messageText, senderID);
-	  var intentName = responseData.result.metadata.intentName;
+	  var intentName = responseData.body.result.metadata.intentName;
 	  console.log('got the intent: ' + intentName);
   
   	  // use intentName to call the right function and pass in data
