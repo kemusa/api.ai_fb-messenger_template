@@ -1,7 +1,7 @@
 var apiai = require('apiai');
 var fb = require('./messenger');
 
-module.exports = {
+module.exports.ai = {
 
 	classifyMessage: function(message, sessionId, client) {
 		console.log('in classifyMessage')

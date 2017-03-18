@@ -2,7 +2,7 @@ var apiai = require('./apidotai');
 var client = 'messenger'
 const access = process.env.FB_ACCESS_TOKEN;
 
-module.exports = {
+module.exports.messenger = {
 	receivedMessage: function(event) {
 	  var senderID = event.sender.id;
 	  var recipientID = event.recipient.id;
