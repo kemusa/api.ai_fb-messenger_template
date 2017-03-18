@@ -19,7 +19,7 @@ module.exports = {
 	callSendAPI: function(messageData) {
 	  request({
 	    uri: 'https://graph.facebook.com/v2.6/me/messages',
-	    qs: { access_token: PAGE_ACCESS_TOKEN },
+	    qs: { access_token: access },
 	    method: 'POST',
 	    json: messageData
 
