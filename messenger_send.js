@@ -2,19 +2,7 @@ var client = 'messenger'
 const access = process.env.FB_ACCESS_TOKEN;
 
 module.exports = {
-	sendTextMessage: function(recipientId, messageText) {
-	  var messageData = {
-	    recipient: {
-	      id: recipientId
-	    },
-	    message: {
-	      text: messageText
-	    }
-	  };
-
-	  callSendAPI(messageData);
-	},
-
+	
 	callSendAPI: function(messageData) {
 	  request({
 	    uri: 'https://graph.facebook.com/v2.6/me/messages',
@@ -35,7 +23,19 @@ module.exports = {
 	      console.error(error);
 	    }
 	  });  
-	}
+	},
 
+	sendTextMessage: function(recipientId, messageText) {
+	  var messageData = {
+	    recipient: {
+	      id: recipientId
+	    },
+	    message: {
+	      text: messageText
+	    }
+	  };
+
+	  callSendAPI(messageData);
+	}
 
 }
