@@ -1,6 +1,5 @@
 var apiai = require('apiai');
 var fb = require('./messenger');
-const access = process.env.FB_ACCESS_TOKEN;
 
 module.exports = {
 
@@ -13,7 +12,7 @@ module.exports = {
 		});
 
 		request.on('response', function(response) {
-		    console.log(response);
+		    console.log('got response');
 
 		switch(client) {
     		case 'messenger':
