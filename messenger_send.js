@@ -12,7 +12,7 @@ module.exports = {
 	    }
 	  };
 
-	  messenger_send.callSendAPI(messageData);
+	  module.exports.callSendAPI(messageData);
 	},
 
 	callSendAPI: function(messageData) {
