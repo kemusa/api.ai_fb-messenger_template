@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 router.post('/data', function(req, res, next) {
   // In this function we take JSON from API.ai and pass data 
   // to the intent function
-
+  console.log('recieved data from API.AI');
   // obtain data JSON
   var data = req.body;
   // obtain intentName
@@ -42,8 +42,6 @@ router.get('/messenger', function(req, res, next) {
 
 router.post('/messenger', function (req, res) {
   var data = req.body;
-  console.log(data);
-
   // Make sure this is a page subscription
   if (data.object === 'page') {
 
@@ -74,5 +72,39 @@ router.post('/messenger', function (req, res) {
   }
 });
 
+function sendTextMessage(recipientId, messageText) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: messageText
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+function callSendAPI(messageData) {
+  request({
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: { access_token: PAGE_ACCESS_TOKEN },
+    method: 'POST',
+    json: messageData
+
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
+
+      console.log("Successfully sent generic message with id %s to recipient %s", 
+        messageId, recipientId);
+    } else {
+      console.error("Unable to send message.");
+      console.error(response);
+      console.error(error);
+    }
+  });  
+}
 
 module.exports = router;

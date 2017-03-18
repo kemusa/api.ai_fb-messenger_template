@@ -12,12 +12,17 @@ module.exports = {
 
 		request.on('response', function(response) {
 		    console.log(response);
+
+		return response
 		});
 
 		request.on('error', function(error) {
 		    console.log(error);
+
+		return error
 		});
 
 		request.end();
+
 	}
 }

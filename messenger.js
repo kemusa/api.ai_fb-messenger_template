@@ -10,14 +10,18 @@ module.exports = {
 	  console.log("Received message for user %d and page %d at %d with message:", 
 	    senderID, recipientID, timeOfMessage);
 	  console.log(JSON.stringify(message));
-	  console.log('no problem 1');
 	  var messageId = message.mid;
 
 	  var messageText = message.text;
 	  var messageAttachments = message.attachments;
-
-	  apiai.classifyMessage(messageText, senderID);
-	  console.log('no problem 2');
-}
+	  console.log('classifying the input')
+	  // NEED TO MAKE CALLS BELOW A PROMISE
+	  var responseData = apiai.classifyMessage(messageText, senderID);
+	  var intentName = responseData.result.metadata.intentName;
+	  console.log('got the intent: ' + intentName);
+  
+  	  // use intentName to call the right function and pass in data
+	  intents[intentName](data);
+	}
 
 };
