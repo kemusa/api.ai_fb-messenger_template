@@ -3,6 +3,7 @@ var request = require('request')
 const access = process.env.FB_ACCESS_TOKEN;
 
 module.exports = {
+	// Package our reply into the right format
 	sendTextMessage: function(recipientId, messageText) {
 	  var messageData = {
 	    recipient: {
@@ -16,6 +17,7 @@ module.exports = {
 	  module.exports.callSendAPI(messageData);
 	},
 
+	// Send reply
 	callSendAPI: function(messageData) {
 	  request({
 	    uri: 'https://graph.facebook.com/v2.6/me/messages',
@@ -31,6 +33,7 @@ module.exports = {
 	      console.log("Successfully sent generic message with id %s to recipient %s", 
 	        messageId, recipientId);
 	    } else {
+	    	// NEED PROPER ERROR HANDLE FOR FAILURE
 	      console.error("Unable to send message.");
 	      console.error(response);
 	      console.error(error);

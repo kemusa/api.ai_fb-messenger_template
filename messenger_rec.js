@@ -3,6 +3,8 @@ var client = 'messenger'
 const access = process.env.FB_ACCESS_TOKEN;
 
 module.exports = {
+	// take incoming messages, get important values and send to API.AI 
+	// for classification
 	receivedMessage: function(event) {
 	  var senderID = event.sender.id;
 	  var recipientID = event.recipient.id;
@@ -17,14 +19,11 @@ module.exports = {
 	  var messageText = message.text;
 	  var messageAttachments = message.attachments;
 	  console.log('classifying the input')
-	  // NEED TO MAKE CALLS BELOW A PROMISE
+	 // Send to API.AI for classification
+	 // send the message string, the sender id as a session id (optimal?)
+	 // and client name to ensure we send the response to the right place 
 	 apiai.classifyMessage(messageText, senderID, client);
-	  // console.log('got the response')
-	  // var intentName = responseData.body.result.metadata.intentName;
-	  // console.log('got the intent: ' + intentName);
-  
-  	  // use intentName to call the right function and pass in data
-	  // intents[intentName](data);
+	  
 	}
 
 }

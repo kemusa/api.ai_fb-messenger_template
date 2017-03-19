@@ -15,22 +15,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-// Route for grabbing intent and data values from API.ai
-router.post('/data', function(req, res, next) {
-  // In this function we take JSON from API.ai and pass data 
-  // to the intent function
-  console.log('recieved data from API.AI');
-  // obtain data JSON
-  var data = req.body;
-  // obtain intentName
-  var intentName = req.body.result.metadata.intentName;
-  
-  // use intentName to call the right function and pass in data
-  intents[intentName](data);
-  res.sendStatus(200);
-});
-
 // Messenger Get and Post clients webhooks
+
+// This get webhook validates our webservice with Facebook
 router.get('/messenger', function(req, res, next) {
 
 	if(req.query['hub.verify_token'] === token) {
@@ -38,7 +25,7 @@ router.get('/messenger', function(req, res, next) {
 	}
 	res.send('Error, wrong token')
 })
-
+// Webhook for incoming messages from Messenger users
 router.post('/messenger', function (req, res) {
   var data = req.body;
   // Make sure this is a page subscription
@@ -54,6 +41,7 @@ router.post('/messenger', function (req, res) {
         if (event.message) {
           fb.receivedMessage(event);
         } else {
+          //NEED TO ERROR HANDLE FOR WHEN WE GET A UNKNOWN EVENT
           console.log("Webhook received unknown event: ", event);
         }
       });
@@ -61,13 +49,15 @@ router.post('/messenger', function (req, res) {
 
     // Assume all went well.
     //
-    // You must send back a 200, within 20 seconds, to let us know
-    // you've successfully received the callback. Otherwise, the request
-    // will time out and we will keep trying to resend.
+    // A 200 must be sent within 20 seconds, to let Facebook know
+    // we've successfully received the callback. Otherwise, the request
+    // will time out and they will keep trying to resend. After 8 hours of
+    // failures Facebook will disconnect our app
     res.sendStatus(200);
   }
   else{
-  	console.log('FAIL');
+    //NEED ERROR HANDLE FOR NON-PAGE SUBSCRIPTIONS
+  	console.log('not a page subscription');
   }
 });
 

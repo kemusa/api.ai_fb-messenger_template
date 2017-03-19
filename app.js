@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // secret:set secret length 
 // saveUninitialized: only save to sessio storage if session is initialized
 // resave: only save session is we change something
+
 // DEFAULT STORAGE IS IN MEMORY... NOT RECOMMENDED FOR PRODUCTION!
 // MUST SAVE TO A SERVER FOR PRODUCTION
 // SEE EXPRESS SESSION REPO FOR OPTIONS
