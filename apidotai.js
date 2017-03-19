@@ -13,7 +13,7 @@ module.exports = {
 
 		request.on('response', function(response) {
 		    console.log('got response');
-		    var reply = response.body.result.fulfillment.speech;
+		    var reply = response.result.fulfillment.speech;
 
 		switch(client) {
     		case 'messenger':
