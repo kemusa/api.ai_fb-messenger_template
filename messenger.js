@@ -28,7 +28,7 @@ var messenger = module.exports = {
       console.log('result is: ' + JSON.stringify(result)); 
       var data = result;
       // parse data
-      var reply = data.result.fulfillment.speech;
+      var reply = data.result.speech;
       // send message back
       messenger.sendTextMessage(SenderID, reply);
     }));
