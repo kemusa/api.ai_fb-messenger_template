@@ -3,7 +3,10 @@ var router = express.Router();
 var mongo = require('mongodb');
 var assert = require('assert');
 var intents = require('../intents');
-var fb = require('../messenger_rec')
+var fb = require('../messenger')
+
+// for testing purposes using test end point
+var apiai = require('../apidotai');
 
 const token = process.env.FB_VERIFY_TOKEN;
 
@@ -13,6 +16,23 @@ var url = 'mongodb://localhost:27017/test';
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
+});
+
+router.post('/test', function(req, res, next) {
+  var message = req.body.message;
+  console.log(message);
+  var senderID = '1234';
+  var client = 'test';
+  var data;
+  console.log('about to make this api call');
+  apiai.classifyMessage(message, senderID)
+    .then((function(result) { 
+      var data = result;
+      console.log('result is: ' + JSON.stringify(data));
+
+
+    }));
+  res.send(data)  
 });
 
 // Messenger Get and Post clients webhooks
