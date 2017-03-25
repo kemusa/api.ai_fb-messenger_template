@@ -30,7 +30,7 @@ var messenger = module.exports = {
       // parse data
       var reply = data.result.speech;
       // send message back
-      messenger.sendTextMessage(SenderID, reply);
+      messenger.sendTextMessage(senderID, reply);
     }));
 	  
 	},
