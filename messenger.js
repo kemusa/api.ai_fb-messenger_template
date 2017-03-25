@@ -1,5 +1,5 @@
+var request = require('request')
 var apiai = require('./apidotai');
-var client = 'messenger'
 const access = process.env.FB_ACCESS_TOKEN;
 
 var messenger = module.exports = {
@@ -23,7 +23,7 @@ var messenger = module.exports = {
 	 // send the message string, the sender id as a session id (optimal?)
 	 // and client name to ensure we send the response to the right place
 	 // SWITCH TO UUID FOR GENERATING SESSION ID... SEE NOTES
-	 apiai.classifyMessage(messageText, senderID, client)
+	 apiai.classifyMessage(messageText, senderID)
     .then((function(result) { 
       console.log('result is: ' + JSON.stringify(result)); 
       var data = result;
