@@ -1,40 +1,66 @@
 var request = require('request')
 var apiai = require('./apidotai');
+var intents = require('./intents');
+// You will have to replace this will your own facebook messenger access token
 const access = process.env.FB_ACCESS_TOKEN;
 
+/**
+ * messenger.js hosts functions for recieving user message event objects from Facebook messages, 
+ * upacking them, sending the messages for classification, and returning the appropriate response
+ * to the user. 
+ */
 var messenger = module.exports = {
-	// take incoming messages, get important values and send to API.AI 
-	// for classification
-	receivedMessage: function(event) {
-	  var senderID = event.sender.id;
-	  var recipientID = event.recipient.id;
-	  var timeOfMessage = event.timestamp;
-	  var message = event.message;
 
-	  console.log("Received message for user %d and page %d at %d with message:", 
-	    senderID, recipientID, timeOfMessage);
-	  console.log(JSON.stringify(message));
-	  var messageId = message.mid;
+  /**
+   * recievedMessage() takes incoming message events, parses the data, sends the message to api.ai
+   * in a Promise for classification. We then take the api.ai response and senderID and send it to 
+   * sendTextMessage()
+   */
+  receivedMessage: function(event) {
+    var senderID = event.sender.id;
+    var recipientID = event.recipient.id;
+    var timeOfMessage = event.timestamp;
+    var message = event.message;
 
-	  var messageText = message.text;
-	  var messageAttachments = message.attachments;
-	  console.log('classifying the input')
-	 // Send to API.AI for classification
-	 // send the message string, the sender id as a session id (optimal?)
-	 // and client name to ensure we send the response to the right place
-	 // SWITCH TO UUID FOR GENERATING SESSION ID... SEE NOTES
-	 apiai.classifyMessage(messageText, senderID)
-    .then((function(result) { 
-      console.log('result is: ' + JSON.stringify(result)); 
-      var data = result;
-      // parse data
-      var reply = data.result.speech;
-      // send message back
-      messenger.sendTextMessage(senderID, reply);
-    }));
-	  
-	},
+    console.log("Received message for user %d and page %d at %d with message:",
+      senderID, recipientID, timeOfMessage);
+    console.log(JSON.stringify(message));
+    var messageId = message.mid;
 
+    var messageText = message.text;
+    var messageAttachments = message.attachments;
+    console.log('classifying the input')
+      // A great alternative for generating and sending session IDs is the node module UUID
+    apiai.classifyMessage(messageText, senderID)
+      .then(function(data) {
+        console.log('message classified by api.ai');
+
+        /******************************************************************************************* 
+         * A function call to intents.<intentName> can be passed here in order to make alterations
+         * To the api.ai response. Another good alternative is to forgo the use of storing 
+         * responses in api.ai and handling that locally. You can simply receive the intent and 
+         * entity names back by using data.result.metadata.intentName and data.result.parameters 
+         * respectively. I find that this provided more options for creating dynamic conversation
+         * flows
+   
+         var intentName = data.result.metadata.intentName;
+         var entities = data.result.parameters;
+         var handledResponse = intents[intentName](intentName, entities);
+         *******************************************************************************************/
+
+        var reply = data.result.speech;
+
+        messenger.sendTextMessage(senderID, reply);
+      }).catch(function(error) {
+        console.log(error)
+      });
+  },
+
+  /**
+   * sendTextMessage() takes the recipientId from the senderID in receivedMessage() and the response
+   * from api.ai. It packages this in an object called messageData and sends this object to the 
+   * callSendAPI() function.  
+   */
   sendTextMessage: function(recipientId, messageText) {
     var messageData = {
       recipient: {
@@ -48,20 +74,22 @@ var messenger = module.exports = {
     messenger.callSendAPI(messageData);
   },
 
-  // Send reply
+  // callSendAPI() takes messageData and sends a POST request to Facebook messenger.
   callSendAPI: function(messageData) {
     request({
       uri: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: { access_token: access },
+      qs: {
+        access_token: access
+      },
       method: 'POST',
       json: messageData
 
-    }, function (error, response, body) {
+    }, function(error, response, body) {
       if (!error && response.statusCode == 200) {
         var recipientId = body.recipient_id;
         var messageId = body.message_id;
 
-        console.log("Successfully sent generic message with id %s to recipient %s", 
+        console.log("Successfully sent generic message with id %s to recipient %s",
           messageId, recipientId);
       } else {
         // NEED PROPER ERROR HANDLE FOR FAILURE
@@ -69,6 +97,6 @@ var messenger = module.exports = {
         console.error(response);
         console.error(error);
       }
-    });  
+    });
   }
 }
